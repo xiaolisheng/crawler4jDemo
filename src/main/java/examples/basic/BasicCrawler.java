@@ -17,6 +17,9 @@
 
 package examples.basic;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -50,7 +53,7 @@ public class BasicCrawler extends WebCrawler {
 
 		// Only accept the url if it is in the "www.ics.uci.edu" domain and
 		// protocol is "http".
-		return href.startsWith("http://www.ics.uci.edu/");
+		return href.startsWith("");
 	}
 
 	/**
@@ -66,6 +69,13 @@ public class BasicCrawler extends WebCrawler {
 		String subDomain = page.getWebURL().getSubDomain();
 		String parentUrl = page.getWebURL().getParentUrl();
 		String anchor = page.getWebURL().getAnchor();
+		try (BufferedOutputStream out = new BufferedOutputStream(
+				new FileOutputStream(
+						"j:/" + (page.getWebURL().getURL()) + ".html"))) {
+			out.write(page.getContentData());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		logger.debug("Docid: {}", docid);
 		logger.info("URL: {}", url);
